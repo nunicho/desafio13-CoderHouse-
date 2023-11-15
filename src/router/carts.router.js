@@ -1,16 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const carritosModelo = require("../models/carritos.modelo.js");
-const Producto = require("../models/productos.modelo.js");
+const carritosModelo = require("../dao/DB/models/carritos.modelo.js");
+const Producto = require("../dao/DB/models/productos.modelo.js");
 const path = require("path");
-const prodModelo = require("../models/productos.modelo.js");
+const prodModelo = require("../dao/DB/models/productos.modelo.js");
 
 
 
 // ------------------ TICKET ----------------- // 
 
-const ticketsModelo = require("../models/ticket.modelo.js");
+const ticketsModelo = require("../dao/DB/models/ticket.modelo.js");
 
 
 router.get("/", async (req, res) => {
