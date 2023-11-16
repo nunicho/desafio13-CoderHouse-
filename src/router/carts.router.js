@@ -5,7 +5,7 @@ const carritosModelo = require("../dao/DB/models/carritos.modelo.js");
 const Producto = require("../dao/DB/models/productos.modelo.js");
 const path = require("path");
 const prodModelo = require("../dao/DB/models/productos.modelo.js");
-
+const carritosController = require("../controllers/carritos.controller.js")
 
 
 // ------------------ TICKET ----------------- // 
@@ -13,53 +13,9 @@ const prodModelo = require("../dao/DB/models/productos.modelo.js");
 const ticketsModelo = require("../dao/DB/models/ticket.modelo.js");
 
 
-router.get("/", async (req, res) => {
-  try {
-    const carritos = await carritosModelo.find();
-    res.status(200).json({ data: carritos });
-  } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-});
+router.get("/", carritosController.obtenerCarritos);
 
-router.get("/:cid", async (req, res) => {
-  try {
-    const cid = req.params.cid;
-
-    if (!mongoose.Types.ObjectId.isValid(cid)) {
-      return res.status(400).json({
-        status: "error",
-        mensaje: 'Requiere un argumento "cid" de tipo ObjectId válido',
-      });
-    }
-
-    const carrito = await carritosModelo.findOne({ _id: cid }).populate({
-      path: "productos.producto",
-      model: prodModelo,
-    });
-
-    if (!carrito) {
-      return res.status(404).json({
-        status: "error",
-        mensaje: `El carrito con ID ${cid} no existe`,
-      });
-    }
-
-    const productosEnCarrito = carrito.productos.map((productoEnCarrito) => ({
-      producto: {
-        ...productoEnCarrito.producto._doc,
-      },
-      quantity: productoEnCarrito.cantidad,
-    }));
-
-    res.status(200).json({
-      data: { carrito: { _id: carrito._id, productos: productosEnCarrito } },
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-});
+router.get("/:cid", carritosController.obtenerCarritoId);
 
 router.post("/purchase", async (req, res) => {
   try {

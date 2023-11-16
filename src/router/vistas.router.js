@@ -215,7 +215,26 @@ router.delete("/DBproducts/:id", auth, productosController.borrarProducto, (req,
 router.get(
   "/carts/:cid",
   auth,
-  carritosController.obtenerCarrito,
+  carritosController.obtenerCarritoId,
+  (req, res) => {
+    const carritoDB = res.locals.carritoDB;
+
+    if (!carritoDB) {
+      return res.status(404).json("Carrito no encontrado");   }
+
+    res.header("Content-type", "text/html");
+    res.status(200).render("DBcartDetails", {
+      carritoDB,
+      estilo: "DBcartDetails.css",
+    });
+  }
+);
+
+/*
+router.get(
+  "/carts/:cid",
+  auth,
+  carritosController.obtenerCarritoId,
   (req, res) => {
     const carritoDB = res.locals.carritoDB;
 
@@ -230,7 +249,7 @@ router.get(
   }
 );
 
-
+*/
 
 //---------------------------------------------------------------- RUTAS PARA EL CHAT --------------- //
 
