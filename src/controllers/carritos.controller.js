@@ -6,6 +6,8 @@ const carritosModelo = require("../dao/DB/models/carritos.modelo.js")
 const productosModelo = require("../dao/DB/models/productos.modelo.js")
 
 
+const ticketsModelo = require("../dao/DB/models/ticket.modelo.js")
+
 const obtenerCarritos = async (req, res) => {
   try {
     const carritos = await carritosModelo.find();
@@ -60,8 +62,126 @@ const obtenerCarritoId = async (req, res, next) => {
 };
 
 
+const crearCarrito = async (req, res) => {
+  try {
+    const carritoToAdd = req.body;
+
+    const hasMissingFields = carritoToAdd.products.some(
+      (product) => !product.id || !product.quantity
+    );
+
+    if (hasMissingFields || carritoToAdd.products.length === 0) {
+      return res.status(400).json({
+        error: 'Los productos deben tener campos "id" y "quantity" completos',
+      });
+    }
+
+    const productIds = carritoToAdd.products.map((product) => product.id);
+
+    for (const productId of productIds) {
+      if (!mongoose.Types.ObjectId.isValid(productId)) {
+        return res.status(400).json({ error: "id inválido" });
+      }
+    }
+
+    const insufficientStockProducts = [];
+
+    // Verificar stock antes de agregar al carrito
+    for (const product of carritoToAdd.products) {
+      const { id, quantity } = product;
+
+      const productInDB = await productosModelo.findById(id);
+
+      if (!productInDB) {
+        return res
+          .status(404)
+          .json({ error: `Producto con id ${id} no encontrado` });
+      }
+
+      if (productInDB.stock < quantity) {
+        insufficientStockProducts.push({
+          id,
+          quantity,
+          availableStock: productInDB.stock,
+        });
+      }
+    }
+
+    if (insufficientStockProducts.length > 0) {
+      return res.status(400).json({
+        error: "No hay suficiente stock para algunos productos en el carrito.",
+        insufficientStockProducts,
+      });
+    }
+
+    const groupedProducts = {};
+    let totalAmount = 0;
+
+    for (const product of carritoToAdd.products) {
+      const { id, quantity } = product;
+
+      const productInDB = await productosModelo.findById(id);
+
+      if (!productInDB) {
+        return res
+          .status(404)
+          .json({ error: `Producto con id ${id} no encontrado` });
+      }
+
+      totalAmount += productInDB.price * quantity;
+
+      if (!groupedProducts[id]) {
+        groupedProducts[id] = parseInt(quantity, 10);
+      } else {
+        groupedProducts[id] += parseInt(quantity, 10);
+      }
+    }
+
+    const carrito = new carritosModelo({
+      productos: Object.keys(groupedProducts).map((id) => ({
+        producto: id,
+        cantidad: groupedProducts[id],
+      })),
+      amount: totalAmount,
+    });
+
+    let carritoInsertado = await carrito.save();
+
+    const ticket = new ticketsModelo({
+      code: generateTicketCode(),
+      purchase_datetime: new Date(),
+      amount: totalAmount,
+      purchaser: req.session.usuario.email,
+    });
+
+    const ticketInsertado = await ticket.save();
+
+    for (const product of carritoToAdd.products) {
+      const productInDB = await productosModelo.findById(product.id);
+      productInDB.stock -= product.quantity;
+      await productInDB.save();
+    }
+
+    res.status(201).json({ carritoInsertado, ticketInsertado });
+  } catch (error) {
+    res.status(500).json({ error: "Error inesperado", detalle: error.message });
+  }
+};
+
+function generateTicketCode() {
+  const currentDate = new Date();
+  const timestamp = currentDate.getTime(); // Obtener el timestamp actual
+  const randomPart = Math.random().toString(36).substring(2, 8); // Generar una cadena aleatoria
+
+  // Concatenar el timestamp y la cadena aleatoria para formar el código del ticket
+  const ticketCode = `${timestamp}${randomPart}`;
+
+  return ticketCode;
+}
+
 module.exports = {
   obtenerCarritos,
   obtenerCarritoId,
+  crearCarrito,
 };
 
