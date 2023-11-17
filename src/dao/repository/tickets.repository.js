@@ -1,9 +1,7 @@
-const ticketsModelo = require("../DB/models/ticket.modelo.js");
+const ticketMongoDao = require("../ticketsMongoDao.js");
 
 async function createTicket(ticketData) {
-  const ticket = new ticketsModelo(ticketData);
-  const ticketInsertado = await ticket.save();
-  return ticketInsertado;
+  return ticketMongoDao.createTicket(ticketData);
 }
 
 module.exports = {
