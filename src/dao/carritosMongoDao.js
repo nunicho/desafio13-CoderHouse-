@@ -1,22 +1,23 @@
-const Carrito = require("./DB/models/carritos.modelo.js");
-const Producto = require("./DB/models/productos.modelo.js");
+const mongoose = require("mongoose");
+const Producto = require("../dao/DB/models/productos.modelo.js");
+const carritosModelo = require("./DB/models/carritos.modelo.js");
 
-const carritosMongoDao = {
-  async obtenerCarritoPorId(id) {
-    try {
-      const carrito = await Carrito.findOne({ _id: id })
-        .populate({
-          path: "productos.producto",
-          model: Producto,
-        })
-        .lean();
-      return carrito;
-    } catch (error) {
-      throw new Error("Error al obtener el carrito desde la base de datos");
-    }
-  },  
-};
+class CarritosMongoDao {
+  async verCarritos() {
+    return carritosModelo.find();
+  }
 
-module.exports = carritosMongoDao;
+  async verCarritoConId(carritoId) {
+    return carritosModelo.findOne({ _id: carritoId }).populate({
+      path: "productos.producto",
+      model: Producto,
+    });
+  }
 
-// FALTA APLICAR REPOSITORY AL CARRITO
+  async crearCarrito(carritoData) {
+    const carrito = new carritosModelo(carritoData);
+    return carrito.save();
+  }
+}
+
+module.exports = new CarritosMongoDao();
