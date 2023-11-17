@@ -215,7 +215,7 @@ router.delete("/DBproducts/:id", auth, productosController.borrarProducto, (req,
 router.get(
   "/carts/:cid",
   auth,
-  carritosController.obtenerCarritoId,
+  carritosController.verCarritoConId,
   (req, res) => {
     const carritoDB = res.locals.carritoDB;
 

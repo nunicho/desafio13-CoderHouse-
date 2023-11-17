@@ -7,7 +7,7 @@ const productosModelo = require("../dao/DB/models/productos.modelo.js")
 
 const ticketsModelo = require("../dao/DB/models/ticket.modelo.js")
 
-const obtenerCarritos = async (req, res) => {
+const verCarritos = async (req, res) => {
   try {
     const carritos = await carritosRepository.verCarritos();
     res.status(200).json({ data: carritos });
@@ -17,7 +17,7 @@ const obtenerCarritos = async (req, res) => {
 };
 
 
-const obtenerCarritoId = async (req, res, next) => {
+const verCarritoConId = async (req, res, next) => {
   try {
     const cid = req.params.cid;
 
@@ -176,8 +176,8 @@ function generateTicketCode() {
 }
 
 module.exports = {
-  obtenerCarritos,
-  obtenerCarritoId,
+  verCarritos,
+  verCarritoConId,
   crearCarrito,
 };
 

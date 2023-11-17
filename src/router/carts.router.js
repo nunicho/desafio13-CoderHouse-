@@ -10,9 +10,9 @@ const carritosController = require("../controllers/carritos.controller.js")
 
 
 
-router.get("/", carritosController.obtenerCarritos);
+router.get("/", carritosController.verCarritos);
 
-router.get("/:cid", carritosController.obtenerCarritoId);
+router.get("/:cid", carritosController.verCarritoConId);
 
 router.post("/purchase", carritosController.crearCarrito);
 
