@@ -1,4 +1,4 @@
-const ticketsModelo = require("../dao/DB/models/ticket.modelo.js");
+const ticketRepository = require("../dao/repository/tickets.repository.js");
 
 function generateTicketCode() {
   const currentDate = new Date();
@@ -9,15 +9,17 @@ function generateTicketCode() {
 }
 
 async function createTicket(amount, purchaserEmail) {
-  const ticket = new ticketsModelo({
-    code: generateTicketCode(),
-    purchase_datetime: new Date(),
+  const ticketCode = generateTicketCode();
+  const purchaseDatetime = new Date();
+
+  const ticket = await ticketRepository.createTicket({
+    code: ticketCode,
+    purchaseDatetime,
     amount,
     purchaser: purchaserEmail,
   });
 
-  const ticketInsertado = await ticket.save();
-  return ticketInsertado;
+  return ticket;
 }
 
 module.exports = {

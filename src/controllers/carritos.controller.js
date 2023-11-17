@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const carritosRepository = require("../dao/repository/carritos.repository.js");
 const carritosModelo = require("../dao/DB/models/carritos.modelo.js");
 const productosModelo = require("../dao/DB/models/productos.modelo.js");
-const { createTicket } = require("./tickets.controller");
+const ticketController = require("./tickets.controller");
 
 const verCarritos = async (req, res) => {
   try {
@@ -136,7 +136,7 @@ const crearCarrito = async (req, res) => {
 
     let carritoInsertado = await carrito.save();
 
-    const ticketInsertado = await createTicket(
+    const ticketInsertado = await ticketController.createTicket(
       totalAmount,
       req.session.usuario.email
     );
