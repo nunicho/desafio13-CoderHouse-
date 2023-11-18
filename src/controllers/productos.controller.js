@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const ProductosRepository = require("../dao/repository/productos.repository.js");
 
+const productosModelo = require("../dao/DB/models/productos.modelo.js")
+
 const listarProductos = async (req, res) => {
   try {
     let pagina = req.query.pagina || 1;
@@ -49,6 +51,10 @@ const listarProductos = async (req, res) => {
   }
 };
 
+
+
+
+
 const obtenerProducto = async (req, res, next) => {
   try {
     let id = req.params.id;
@@ -68,6 +74,16 @@ const obtenerProducto = async (req, res, next) => {
     });
   }
 };
+
+const obtenerProductoById = async (id) =>{
+ try {
+     const product = await productosModelo.findById(id);
+     return product
+ } catch (error) {
+       return (error)
+ }
+}
+
 
 const crearProducto = async (req, res) => {
   try {
@@ -130,6 +146,7 @@ module.exports = {
   listarProductos,
   crearProducto,
   obtenerProducto,
+  obtenerProductoById,
   borrarProducto,
 };
 

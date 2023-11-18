@@ -4,6 +4,8 @@ const carritosModelo = require("../dao/DB/models/carritos.modelo.js");
 const productosModelo = require("../dao/DB/models/productos.modelo.js");
 const ticketController = require("./tickets.controller");
 
+const productosController = require("../controllers/productos.controller.js")
+
 const verCarritos = async (req, res) => {
   try {
     const carritos = await carritosRepository.verCarritos();
@@ -79,7 +81,7 @@ const crearCarrito = async (req, res) => {
     for (const product of carritoToAdd.products) {
       const { id, quantity } = product;
 
-      const productInDB = await productosModelo.findById(id);
+      const productInDB = await productosController.obtenerProductoById(id);
 
       if (!productInDB) {
         return res
@@ -109,7 +111,7 @@ const crearCarrito = async (req, res) => {
     for (const product of carritoToAdd.products) {
       const { id, quantity } = product;
 
-      const productInDB = await productosModelo.findById(id);
+      const productInDB = await productosController.obtenerProductoById(id);
 
       if (!productInDB) {
         return res
@@ -143,7 +145,7 @@ const crearCarrito = async (req, res) => {
 
     for (const product of carritoToAdd.products) {
       const id = product.id
-      const productInDB = await productosModelo.findById(id);
+      const productInDB = await productosController.obtenerProductoById(id);
       productInDB.stock -= product.quantity;
       await productInDB.save();
     }
