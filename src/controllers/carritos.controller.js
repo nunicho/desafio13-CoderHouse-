@@ -142,7 +142,8 @@ const crearCarrito = async (req, res) => {
     );
 
     for (const product of carritoToAdd.products) {
-      const productInDB = await productosModelo.findById(product.id);
+      const id = product.id
+      const productInDB = await productosModelo.findById(id);
       productInDB.stock -= product.quantity;
       await productInDB.save();
     }
