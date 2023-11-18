@@ -77,7 +77,7 @@ const obtenerProducto = async (req, res, next) => {
 
 const obtenerProductoById = async (id) =>{
  try {
-     const product = await productosModelo.findById(id);
+     const product = await ProductosRepository.obtenerProductoById(id);
      return product
  } catch (error) {
        return (error)

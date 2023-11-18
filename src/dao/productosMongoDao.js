@@ -15,6 +15,10 @@ class ProductosMongoDao {
     return await ProductosModelo.findById(id).lean();
   }
 
+  async obtenerProductoById(id) {
+    return await ProductosModelo.findById(id);
+  }
+
   async crearProducto(producto) {
     return await ProductosModelo.create(producto);
   }
@@ -27,8 +31,8 @@ class ProductosMongoDao {
     return await ProductosModelo.deleteOne({ _id: id });
   }
 
-  async buscarCode (code){
-      await ProductosModelo.findOne({ code: code });
+  async buscarCode(code) {
+    await ProductosModelo.findOne({ code: code });
   }
 }
 

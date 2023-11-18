@@ -23,6 +23,14 @@ class ProductosRepository {
     }
   }
 
+  async obtenerProductoById(id) {
+    try {
+      return await ProductosMongoDao.obtenerProductoById(id);
+    } catch (error) {
+      throw new Error("Error al obtener producto en el repositorio");
+    }
+  }
+
   async crearProducto(producto) {
     try {
       const existe = await ProductosMongoDao.existeProducto(producto.code);
@@ -50,12 +58,10 @@ class ProductosRepository {
       throw new Error("Error al borrar producto en el repositorio");
     }
   }
-  
-async existeProducto  (code) {
-  return await ProductosMongoDao.existeProducto(code);
-};
 
-
+  async existeProducto(code) {
+    return await ProductosMongoDao.existeProducto(code);
+  }
 }
 
 module.exports = new ProductosRepository();
