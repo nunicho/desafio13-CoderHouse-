@@ -34,6 +34,14 @@ class ProductosMongoDao {
   async buscarCode(code) {
     await ProductosModelo.findOne({ code: code });
   }
+
+  async editarProducto(id, producto) {
+    return await ProductosModelo.findOneAndUpdate(
+      { _id: id },
+      { $set: producto },
+      { new: true }
+    );
+  }
 }
 
 module.exports = new ProductosMongoDao();

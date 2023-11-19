@@ -62,6 +62,29 @@ class ProductosRepository {
   async existeProducto(code) {
     return await ProductosMongoDao.existeProducto(code);
   }
+
+  async editarProducto(id, producto) {
+    try {
+      // Verifica si el producto existe antes de intentar editarlo
+      const productoExistente = await ProductosMongoDao.obtenerProducto(id);
+      if (!productoExistente) {
+        throw new Error(`Producto con id ${id} inexistente`);
+      }
+
+      // Actualiza el producto en la base de datos usando el método en ProductosMongoDao
+      const productoEditado = await ProductosMongoDao.editarProducto(
+        id,
+        producto
+      );
+
+      return productoEditado;
+    } catch (error) {
+      throw new Error("Error al editar producto en el repositorio");
+    }
+  }
 }
+
+
+
 
 module.exports = new ProductosRepository();
