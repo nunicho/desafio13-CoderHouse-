@@ -52,54 +52,6 @@ const listarProductos = async (req, res) => {
 };
 
 
-const listarProductosAdmin = async (req, res) => {
-  try {
-    let pagina = req.query.pagina || 1;
-    let filtroTitle = req.query.filtro;
-    let filtroCode = req.query.codeFilter;
-    let sortOption = req.query.sort;
-    let limit = parseInt(req.query.limit) || 10;
-
-    let query = {};
-
-    if (filtroTitle && filtroCode) {
-      query = {
-        $or: [
-          { title: { $regex: filtroTitle, $options: "i" } },
-          { code: { $regex: filtroCode, $options: "i" } },
-        ],
-      };
-    } else if (filtroTitle) {
-      query = { title: { $regex: filtroTitle, $options: "i" } };
-    } else if (filtroCode) {
-      query = { code: { $regex: filtroCode, $options: "i" } };
-    }
-
-    let sortQuery = {};
-
-    if (sortOption === "price_asc") {
-      sortQuery.price = 1;
-    } else if (sortOption === "price_desc") {
-      sortQuery.price = -1;
-    }
-
-    const productosAdmin = await ProductosRepository.listarProductosAdmin(
-      query,
-      limit,
-      pagina,
-      sortQuery
-    );
-
-    let { totalPages, hasPrevPage, hasNextPage, prevPage, nextPage } =
-      productosAdmin;
-
-    // Puedes devolver los productos o cualquier información adicional que necesites
-    return productosAdmin;
-  } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-};
-
 const obtenerProducto = async (req, res, next) => {
   try {
     let id = req.params.id;
@@ -189,7 +141,6 @@ const borrarProducto = async (req, res) => {
 
 module.exports = {
   listarProductos,
-  listarProductosAdmin,
   crearProducto,
   obtenerProducto,
   obtenerProductoById,

@@ -11,15 +11,6 @@ class ProductosMongoDao {
     });
   }
 
-  async listarProductosAdmin(query, limit, pagina, sortQuery) {
-    return await ProductosModelo.paginate(query, {
-      limit: limit,
-      lean: true,
-      page: pagina,
-      sort: sortQuery,
-    });
-  }
-
   async obtenerProducto(id) {
     return await ProductosModelo.findById(id).lean();
   }

@@ -15,19 +15,6 @@ class ProductosRepository {
     }
   }
 
-  async listarProductosAdmin(query, limit, pagina, sortQuery) {
-    try {
-      return await ProductosMongoDao.listarProductosAdmin(
-        query,
-        limit,
-        pagina,
-        sortQuery
-      );
-    } catch (error) {
-      throw new Error("Error al listar productos en el repositorio");
-    }
-  }
-
   async obtenerProducto(id) {
     try {
       return await ProductosMongoDao.obtenerProducto(id);

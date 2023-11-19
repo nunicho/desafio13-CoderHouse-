@@ -150,24 +150,24 @@ router.get(
   authRol(["administrador"]),
   async (req, res) => {
     try {
-      const productosAdmin = await productosController.listarProductosAdmin(
+      const productos = await productosController.listarProductos(
         req,
         res
       );
 
       res.header("Content-type", "text/html");
       res.status(200).render("DBproducts-Admin", {
-        productos: productosAdmin.docs,
-        hasProducts: productosAdmin.docs.length > 0,
+        productos: productos.docs,
+        hasProducts: productos.docs.length > 0,
         // activeProduct: true,
-        status: productosAdmin.docs.status,
+        status: productos.docs.status,
         pageTitle: "Productos en DATABASE",
         estilo: "productsStyles.css",
-        totalPages: productosAdmin.totalPages,
-        hasPrevPage: productosAdmin.hasPrevPage,
-        hasNextPage: productosAdmin.hasNextPage,
-        prevPage: productosAdmin.prevPage,
-        nextPage: productosAdmin.nextPage,
+        totalPages: productos.totalPages,
+        hasPrevPage: productos.hasPrevPage,
+        hasNextPage: productos.hasNextPage,
+        prevPage: productos.prevPage,
+        nextPage: productos.nextPage,
         filtro: req.query.filtro || "",
         codeFilter: req.query.codeFilter || "",
         sort: req.query.sort || "",
