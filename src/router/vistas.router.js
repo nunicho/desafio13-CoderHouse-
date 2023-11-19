@@ -126,7 +126,7 @@ router.get("/DBproducts", auth, authRol(["user"]), async (req, res) => {
       hasProducts: productos.docs.length > 0,
       // activeProduct: true,
       status: productos.docs.status,
-      pageTitle: "Productos en DATABASE",
+      pageTitle: "Catálogo de",
       estilo: "productsStyles.css",
       totalPages: productos.totalPages,
       hasPrevPage: productos.hasPrevPage,
@@ -150,21 +150,24 @@ router.get(
   authRol(["administrador"]),
   async (req, res) => {
     try {
-      const productos = await productosController.listarProductos(req, res);
+      const productosAdmin = await productosController.listarProductosAdmin(
+        req,
+        res
+      );
 
       res.header("Content-type", "text/html");
       res.status(200).render("DBproducts-Admin", {
-        productos: productos.docs,
-        hasProducts: productos.docs.length > 0,
+        productos: productosAdmin.docs,
+        hasProducts: productosAdmin.docs.length > 0,
         // activeProduct: true,
-        status: productos.docs.status,
+        status: productosAdmin.docs.status,
         pageTitle: "Productos en DATABASE",
         estilo: "productsStyles.css",
-        totalPages: productos.totalPages,
-        hasPrevPage: productos.hasPrevPage,
-        hasNextPage: productos.hasNextPage,
-        prevPage: productos.prevPage,
-        nextPage: productos.nextPage,
+        totalPages: productosAdmin.totalPages,
+        hasPrevPage: productosAdmin.hasPrevPage,
+        hasNextPage: productosAdmin.hasNextPage,
+        prevPage: productosAdmin.prevPage,
+        nextPage: productosAdmin.nextPage,
         filtro: req.query.filtro || "",
         codeFilter: req.query.codeFilter || "",
         sort: req.query.sort || "",
