@@ -139,11 +139,65 @@ const borrarProducto = async (req, res) => {
   }
 };
 
+const editarProducto = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const producto = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "ID inválido" });
+    }
+
+    const productoDB = await ProductosRepository.obtenerProducto(id);
+
+    if (!productoDB) {
+      return res
+        .status(404)
+        .json({ error: `Producto con id ${id} inexistente` });
+    }
+
+    // Validaciones para la edición del producto
+    if (
+      !producto.title ||
+      !producto.description ||
+      !producto.price ||
+      !producto.thumbnail ||
+      !producto.code ||
+      !producto.stock
+    ) {
+      return res.status(400).json({ error: "Faltan datos" });
+    }
+
+    if (producto.code !== productoDB.code) {  
+      const existeNuevoCodigo = await ProductosRepository.existeProducto(
+        producto.code
+      );
+      if (existeNuevoCodigo) {
+        return res.status(400).json({
+          error: `El código ${producto.code} ya está siendo usado por otro producto.`,
+        });
+      }
+    }
+    const productoEditado = await ProductosRepository.editarProducto(
+      id,
+      producto
+    );
+
+    res
+      .status(200)
+      .json({ mensaje: "Producto editado correctamente", productoEditado });
+  } catch (error) {
+    res.status(500).json({ error: "Error inesperado", detalle: error.message });
+  }
+};
+
+
 module.exports = {
   listarProductos,
   crearProducto,
   obtenerProducto,
   obtenerProductoById,
   borrarProducto,
+  editarProducto
 };
 
