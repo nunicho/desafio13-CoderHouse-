@@ -354,15 +354,36 @@ router.get("/current", (req, res) => {
 router.get("/mockingproducts", (req, res) => {
   // Genera 100 productos falsos
   const fakeProducts = fakeDataGenerator.generateFakeProducts(100);
-
-  // Renderiza la vista con los productos generados
   res.render("FAKERproducts", {
     productos: fakeProducts,
     hasProducts: fakeProducts.length > 0,
-    // Añade otras variables que necesites
+    pageTitle: "Productos en DATABASE",
+    estilo: "productsStyles.css",
   });
 });
 
+router.get("/mockingproducts/:id", async (req, res) => {
+  try {
+    // Obtiene el ID del producto de los parámetros de la URL
+    const productId = req.params.id;
 
+    // Busca el producto en la base de datos por ID
+    const productDetails = await productosModeloFaker.findById(productId);
+
+    if (!productDetails) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+
+    // Renderiza la plantilla de detalles del producto
+    res.render("FAKERproductsDetails", {
+      product: productDetails,
+      pageTitle: "Detalles del Producto",
+      estilo: "productDetailsStyles.css",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
 
 module.exports = router;

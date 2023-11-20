@@ -47,7 +47,10 @@
             </header>
             <div class="card__image">
                 <img class="dbimg"src={{this.thumbnail}}
-                    alt="Product">
+                    alt="{{this.title}}">
+            </div>
+            <div>
+                <h3>${{this.price}}</h3>
             </div>
         </article> 
         <a href="DBProducts/{{ this._id }}">Más detalles</a>        

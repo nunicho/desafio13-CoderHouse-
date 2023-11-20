@@ -3,17 +3,27 @@
 <h1>Productos Falsos Generados</h1>
 
 {{#if hasProducts}}
-  <ul>
+   <div class="grid">
     {{#each productos}}
-      <li>
-        <h3>{{this.title}}</h3>
-        <p>{{this.description}}</p>
-        <p>Precio: {{this.price}}</p>
-        <img src="{{this.thumbnail}}" alt="{{this.title}}">
-        <!-- Agrega más información según tus necesidades -->
-      </li>
+    <article class="card product-item">
+        <header class="card__header">
+            <h2 class="product__title">{{ this.title}}</h2>
+        </header>
+        <div class="card__image">
+            <img class="dbimg"src={{this.thumbnail}}
+            alt="{{this.title}}">
+        </div>
+        <div>
+           <h3>${{this.price}}</h3>
+        </div>
+         </article>
+        <a href="/mockingproducts/{{ this._id }}">Más detalles</a>
     {{/each}}
   </ul>
 {{else}}
   <p>No se encontraron productos falsos.</p>
 {{/if}}
+
+
+
+   </div>

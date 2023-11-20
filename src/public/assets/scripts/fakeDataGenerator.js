@@ -1,5 +1,6 @@
 const {faker} =require("@faker-js/faker")
-const productosModeloFaker = require("../../../dao/DB/models/productosFaker.modelo")
+const productosModeloFaker = require("../../../dao/Faker/models/productosFaker.modelo")
+const mongoose = require("mongoose");
 
 
 
@@ -9,14 +10,23 @@ const generateFakeProducts = (quantity) => {
 
   for (let i = 0; i < quantity; i++) {
     const fakeProduct = {
+      _id: faker.database.mongodbObjectId(),
       status: true,
       title: faker.commerce.productName(),
-      description: faker.lorem.words(10),
-      //price: faker.random.number({ min: 1, max: 1000, precision: 0.01 }),
-      price: 1,
-      thumbnail: faker.image.url(),
-      code: 1,
-      stock: 1
+      description: faker.commerce.productDescription(),
+      price: faker.commerce.price({
+        min: 100,
+        max: 50000,
+        dec: 0,
+        symbol: "$",
+      }),
+      thumbnail: faker.image.urlLoremFlickr({ category: "abstract" }),
+      code: Math.floor(Math.random() * 1000000) + 1,
+      stock: faker.commerce.price({
+        min: 10,
+        max: 25,
+        dec: 0,
+      }),
     };
 
     fakeProducts.push(fakeProduct);
