@@ -167,7 +167,7 @@ const editarProducto = async (req, res) => {
     ) {
       return res.status(400).json({ error: "Faltan datos" });
     }
-
+    
     if (producto.code !== productoDB.code) {  
       const existeNuevoCodigo = await ProductosRepository.existeProducto(
         producto.code
@@ -177,15 +177,16 @@ const editarProducto = async (req, res) => {
           error: `El código ${producto.code} ya está siendo usado por otro producto.`,
         });
       }
+      return
     }
     const productoEditado = await ProductosRepository.editarProducto(
       id,
       producto
     );
 
-    res
-      .status(200)
-      .json({ mensaje: "Producto editado correctamente", productoEditado });
+    // res
+    //   .status(200)
+    //   .json({ mensaje: "Producto editado correctamente", productoEditado });
   } catch (error) {
     res.status(500).json({ error: "Error inesperado", detalle: error.message });
   }

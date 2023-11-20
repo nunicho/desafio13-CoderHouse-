@@ -211,7 +211,8 @@ router.delete("/DBproducts/:id", auth, productosController.borrarProducto, (req,
 
 });
 
-router.route("/editarProducto/:id")
+router
+  .route("/editarProducto/:id")
   .all(auth, productosController.obtenerProducto)
   .get((req, res) => {
     const productoDB = res.locals.productoDB;
@@ -221,10 +222,13 @@ router.route("/editarProducto/:id")
     res.header("Content-type", "text/html");
     res.status(200).render("editarProducto", {
       productoDB,
-      estilo: "editarProducto.css", // Reemplaza con el nombre de tu nuevo estilo
+      estilo: "editarProducto.css",
     });
   })
-  .post(productosController.editarProducto);  // Maneja la solicitud POST para editar el producto
+  .post((req, res, next) => {
+    productosController.editarProducto(req, res, next);
+    res.redirect("/DBProducts-Admin");
+  });
 //---------------------------------------------------------------- RUTAS PARA CARRITOS--------------- //
 
 
