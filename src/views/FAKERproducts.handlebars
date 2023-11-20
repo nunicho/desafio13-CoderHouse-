@@ -1,0 +1,19 @@
+<!-- FAKERproducts.handlebars -->
+
+<h1>Productos Falsos Generados</h1>
+
+{{#if hasProducts}}
+  <ul>
+    {{#each productos}}
+      <li>
+        <h3>{{this.title}}</h3>
+        <p>{{this.description}}</p>
+        <p>Precio: {{this.price}}</p>
+        <img src="{{this.thumbnail}}" alt="{{this.title}}">
+        <!-- Agrega más información según tus necesidades -->
+      </li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>No se encontraron productos falsos.</p>
+{{/if}}

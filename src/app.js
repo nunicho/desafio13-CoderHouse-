@@ -8,6 +8,8 @@ const moongose = require("mongoose");
 const path = require("path");
 const cookieParser = require("cookie-parser")
 
+
+
 // DOTENV 
 const config = require("./config/config.js")
 //console.log(config.DB_NAME)

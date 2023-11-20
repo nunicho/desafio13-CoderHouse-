@@ -12,6 +12,9 @@ const carritosController = require("../controllers/carritos.controller.js");
 //DTO para la vista CURRENT
 const dtoUsuarios = require("../dto/dtoUsuarios.js")
 
+// FAKER
+const fakeDataGenerator = require("../public/assets/scripts/fakeDataGenerator.js");
+
 
 const mongoose = require("mongoose");
 
@@ -227,6 +230,7 @@ router
   })
   .post((req, res, next) => {
     productosController.editarProducto(req, res, next);
+
     res.redirect("/DBProducts-Admin");
   });
 //---------------------------------------------------------------- RUTAS PARA CARRITOS--------------- //
@@ -249,27 +253,6 @@ router.get(
     });
   }
 );
-
-/*
-router.get(
-  "/carts/:cid",
-  auth,
-  carritosController.obtenerCarritoId,
-  (req, res) => {
-    const carritoDB = res.locals.carritoDB;
-
-    if (!carritoDB) {
-      return res.status(404).json("Carrito no encontrado");
-    }   
-    res.header("Content-type", "text/html");
-    res.status(200).render("DBcartDetails", {
-      carritoDB,
-      estilo: "DBcartDetails.css",
-    });
-  }
-);
-
-*/
 
 //---------------------------------------------------------------- RUTAS PARA EL CHAT --------------- //
 
@@ -364,5 +347,22 @@ router.get("/current", (req, res) => {
     usuario: usuarioDTO,
   });
 });
+
+//---------------------------------------------------------------- RUTA FAKER---------------//
+
+
+router.get("/mockingproducts", (req, res) => {
+  // Genera 100 productos falsos
+  const fakeProducts = fakeDataGenerator.generateFakeProducts(100);
+
+  // Renderiza la vista con los productos generados
+  res.render("FAKERproducts", {
+    productos: fakeProducts,
+    hasProducts: fakeProducts.length > 0,
+    // Añade otras variables que necesites
+  });
+});
+
+
 
 module.exports = router;
