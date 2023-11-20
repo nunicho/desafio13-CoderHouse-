@@ -362,28 +362,17 @@ router.get("/mockingproducts", (req, res) => {
   });
 });
 
-router.get("/mockingproducts/:id", async (req, res) => {
-  try {
-    // Obtiene el ID del producto de los parámetros de la URL
-    const productId = req.params.id;
+router.get("/mockingproducts/:id", (req, res) => {
+  // Simula la búsqueda del producto por ID
+  const productId = req.params.id;
+  const fakeProduct = fakeDataGenerator.generateFakeProducts(1)[0]; // Genera un producto falso para simular la búsqueda
 
-    // Busca el producto en la base de datos por ID
-    const productDetails = await productosModeloFaker.findById(productId);
-
-    if (!productDetails) {
-      return res.status(404).json({ error: "Producto no encontrado" });
-    }
-
-    // Renderiza la plantilla de detalles del producto
-    res.render("FAKERproductsDetails", {
-      product: productDetails,
-      pageTitle: "Detalles del Producto",
-      estilo: "productDetailsStyles.css",
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
+  res.render("FAKERproductsDetails", {
+    product: fakeProduct,
+    pageTitle: "Detalles del Producto",
+    estilo: "productDetailsStyles.css",
+  });
 });
+
 
 module.exports = router;

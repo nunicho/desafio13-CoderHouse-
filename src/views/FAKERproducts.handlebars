@@ -1,4 +1,7 @@
 <!-- FAKERproducts.handlebars -->
+<span><a  href="/">Regresar</a></span> <span><button id="printButton">Imprimir Lista</button></span>
+<br/>
+
 
 <h1>Productos Falsos Generados</h1>
 
@@ -14,7 +17,7 @@
             alt="{{this.title}}">
         </div>
         <div>
-           <h3>${{this.price}}</h3>
+           <h3>{{this.price}}</h3>
         </div>
          </article>
         <a href="/mockingproducts/{{ this._id }}">Más detalles</a>
@@ -27,3 +30,6 @@
 
 
    </div>
+
+
+   <script type="module" src="assets/scripts/print.js"></script> 
