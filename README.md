@@ -14,20 +14,15 @@ Mauricio Javier ALONSO
 
 ## 3. TITULO DESAFIO ENTREGABLE: 
 
-Tercera entrega del desafío final
+Mocking  y manejo de errores
 
 ## 4. N° DESAFIO ENTREGABLE: 
 
-N° 12
+N° 13
 
 ## 5. CONSIGNA DESAFIO ENTREGABLE: 
 
-Mejorando la arquitectura del servidor.
-
-Profesionalizar el servidor.
-Aplicar una arquitectura profesional para nuestro servidor.
-Aplc
-
+Se aplicará un módulo de mocking y un manejador de errores a tu servidor actual.
 
 
 ## 6. Como configurar una peticiones a la base de datos / Producto:
@@ -162,3 +157,4 @@ En cambio, si ingresa un usuario, podrá manejar el carrito de compras y el chat
 Para users y productos.
 
 ## 15. Se implementó un ticket con la compra
+
