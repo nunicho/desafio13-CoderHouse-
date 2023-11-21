@@ -231,7 +231,7 @@ router
   .post((req, res, next) => {
     productosController.editarProducto(req, res, next);
 
-    res.redirect("/DBProducts-Admin");
+    //res.redirect("/DBProducts-Admin");
   });
 //---------------------------------------------------------------- RUTAS PARA CARRITOS--------------- //
 

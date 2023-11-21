@@ -238,6 +238,7 @@ const editarProducto = async (req, res) => {
     // res
     //   .status(200)
     //   .json({ mensaje: "Producto editado correctamente", productoEditado });
+  res.redirect("/DBProducts-Admin");
   } catch (error) {
     res
       .status(error.codigo || tiposDeError.ERROR_INTERNO_SERVIDOR)
