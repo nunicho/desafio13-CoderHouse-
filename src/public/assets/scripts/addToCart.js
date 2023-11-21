@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!response.ok) {
         const errorData = await response.json();
 
+
         if (errorData.insufficientStockProducts) {
           alert("Stock insuficiente para algunos productos en el carrito.");
           return;
