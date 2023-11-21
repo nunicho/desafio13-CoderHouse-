@@ -230,18 +230,14 @@ router
   })
   .post(async (req, res, next) => {
     try {
-      // Llama al controlador para editar el producto
       await productosController.editarProducto(req, res, next);
-
-      // Extrae la información de redirección del res.locals
+  
       const { redireccionar, productoEditado, error } = res.locals;
 
-      // Redirige si es necesario
       if (redireccionar) {
         res.redirect("/DBProducts-Admin");
       } else {
-        // Maneja el error si no se redirige
-        if (error) {
+       if (error) {
           console.error("Error al editar producto:", error);
           res.status(error.codigo).send(error.detalle);
         }
