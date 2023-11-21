@@ -9,6 +9,9 @@ const productosController = require("../controllers/productos.controller.js");
 const carritosController = require("../controllers/carritos.controller.js");
 
 
+const CustomError = require("../utils/customError.js");
+const tiposDeError = require("../utils/tiposDeError.js");
+
 //DTO para la vista CURRENT
 const dtoUsuarios = require("../dto/dtoUsuarios.js")
 
@@ -40,6 +43,25 @@ const authRol = (roles) => {
     const user = req.session.usuario;
 
     if (!user || !roles.includes(user.role)) {
+       throw new CustomError(
+         "ERROR_DATOS",
+         "No tienes permisos para acceder a esta ruta",
+         tiposDeError.ERROR_AUTORIZACION,
+         "No tienes permisos para acceder a esta ruta"
+       );
+    }
+
+    next();
+  };
+};
+
+/*
+
+const authRol = (roles) => {
+  return (req, res, next) => {
+    const user = req.session.usuario;
+
+    if (!user || !roles.includes(user.role)) {
       return res
         .status(403)
         .send("No tienes permisos para acceder a esta ruta");
@@ -48,6 +70,9 @@ const authRol = (roles) => {
     next();
   };
 };
+*/
+
+  
 
 router.use((req, res, next) => {
   res.locals.usuario = req.session.usuario; // Pasar el usuario a res.locals
@@ -220,7 +245,12 @@ router
   .get((req, res) => {
     const productoDB = res.locals.productoDB;
     if (!productoDB) {
-      return res.status(404).send("Producto no encontrado");
+      throw new CustomError(
+        "ERROR_DATOS",
+        "Producto no encontrado",
+        tiposDeError.PRODUCTO_NO_ENCONTRADO,
+        "Producto no encontrado"
+      );
     }
     res.header("Content-type", "text/html");
     res.status(200).render("editarProducto", {
@@ -247,6 +277,8 @@ router
       res.status(500).send("Error interno del servidor");
     }
   });
+
+  
 //---------------------------------------------------------------- RUTAS PARA CARRITOS--------------- //
 
 
@@ -258,7 +290,13 @@ router.get(
     const carritoDB = res.locals.carritoDB;
 
     if (!carritoDB) {
-      return res.status(404).json("Carrito no encontrado");   }
+        throw new CustomError(
+          "ERROR_DATOS",
+          "Carrito no encontrado",
+          tiposDeError.CARRITO_NO_ENCONTRADO,
+          "Carrito no encontrado"
+        );
+        }
 
     res.header("Content-type", "text/html");
     res.status(200).render("DBcartDetails", {
@@ -267,6 +305,7 @@ router.get(
     });
   }
 );
+
 
 //---------------------------------------------------------------- RUTAS PARA EL CHAT --------------- //
 
