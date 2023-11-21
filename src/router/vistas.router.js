@@ -228,10 +228,28 @@ router
       estilo: "editarProducto.css",
     });
   })
-  .post((req, res, next) => {
-    productosController.editarProducto(req, res, next);
+  .post(async (req, res, next) => {
+    try {
+      // Llama al controlador para editar el producto
+      await productosController.editarProducto(req, res, next);
 
-    //res.redirect("/DBProducts-Admin");
+      // Extrae la información de redirección del res.locals
+      const { redireccionar, productoEditado, error } = res.locals;
+
+      // Redirige si es necesario
+      if (redireccionar) {
+        res.redirect("/DBProducts-Admin");
+      } else {
+        // Maneja el error si no se redirige
+        if (error) {
+          console.error("Error al editar producto:", error);
+          res.status(error.codigo).send(error.detalle);
+        }
+      }
+    } catch (error) {
+      console.error("Error al editar producto:", error);
+      res.status(500).send("Error interno del servidor");
+    }
   });
 //---------------------------------------------------------------- RUTAS PARA CARRITOS--------------- //
 

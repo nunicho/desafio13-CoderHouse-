@@ -139,7 +139,7 @@ const crearProducto = async (req, res) => {
   }
 };
 
-const borrarProducto = async (req, res) => {
+const borrarProducto = async (req, res, next) => {
   try {
     const id = req.params.id;
 
@@ -175,7 +175,7 @@ const borrarProducto = async (req, res) => {
   }
 };
 
-const editarProducto = async (req, res) => {
+const editarProducto = async (req, res, next) => {
   try {
     const id = req.params.id;
     const producto = req.body;
@@ -216,7 +216,7 @@ const editarProducto = async (req, res) => {
         "Faltan datos obligatorios para editar el producto."
       );
     }
-    
+
     if (producto.code !== productoDB.code) {
       const existeNuevoCodigo = await ProductosRepository.existeProducto(
         producto.code
@@ -235,14 +235,18 @@ const editarProducto = async (req, res) => {
       producto
     );
 
-    // res
-    //   .status(200)
-    //   .json({ mensaje: "Producto editado correctamente", productoEditado });
-  res.redirect("/DBProducts-Admin");
+    res.locals.redireccionar = true;
+    res.locals.productoEditado = productoEditado;
   } catch (error) {
-    res
-      .status(error.codigo || tiposDeError.ERROR_INTERNO_SERVIDOR)
-      .json({ error: "Error inesperado", detalle: error.message });
+    // Almacena la información necesaria para la redirección en caso de error
+    res.locals.redireccionar = false;
+    res.locals.error = {
+      codigo: error.codigo || tiposDeError.ERROR_INTERNO_SERVIDOR,
+      mensaje: "Error inesperado",
+      detalle: error.message,
+    };
+  } finally {
+    next(); // Llama a next para pasar al siguiente middleware (vistas.router)
   }
 };
 
