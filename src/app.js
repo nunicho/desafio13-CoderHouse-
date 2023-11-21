@@ -8,7 +8,8 @@ const moongose = require("mongoose");
 const path = require("path");
 const cookieParser = require("cookie-parser")
 
-
+//MANEJO DE ERRORES
+const errorHandler = require("./middleware/errorHandler.js");
 
 // DOTENV 
 const config = require("./config/config.js")
@@ -211,3 +212,5 @@ socket.on("disconnect", () => {
 
   socket.emit("productosActualizados", getProducts());
 });
+
+app.use(errorHandler);
